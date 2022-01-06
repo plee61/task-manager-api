@@ -31,16 +31,18 @@ router.get('/tasks', auth, async (req, res) => {
     }
     
     try {
-        await req.user.populate({
-            path: 'tasks',
-            match,
-            options: {
-            limit: parseInt(req.query.limit),
-            skip: parseInt(req.query.skip),
-            sort
-        }
-        }).execPopulate()
-        res.send(req.user.tasks)
+        // const tasks = await req.user.populate({
+        //     path: 'tasks',
+        //     match,
+        //     options: {
+        //     limit: parseInt(req.query.limit),
+        //     skip: parseInt(req.query.skip),
+        //     sort
+        // }
+        // }).execPopulate()
+        const tasks = await Task.find({owner: req.user._id})
+        res.send(tasks)
+        
     } catch (e) {
         console.log(e)
         res.status(500).send()

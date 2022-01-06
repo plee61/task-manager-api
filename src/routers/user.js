@@ -15,7 +15,7 @@ router.post('/users', async (req, res) => {
         const token = await user.generateAuthToken()
         res.status(201).send({ user, token })
     } catch (e) {
-        console.log(e)
+        console.log(`post /users from user.js router ${e}`)
         res.status(400).send('create user error:' + e)
     }
 })
@@ -125,8 +125,9 @@ router.post('/users/me/avatar', avatarUpload.single('avatar'), auth, async (req,
     const buffer = await sharp(req.file.buffer).resize({width:250, height:250}).png().toBuffer()
     req.user.avatar = buffer
     await req.user.save()
-    res.send('successful')
+    res.send()
 }, (error, req, res, next) =>{
+    console.log(`user router avatar ${error}`)
     res.status(400).send({error: error.message})
 })
 router.delete('/users/me/avatar', auth, async (req, res)=>{
